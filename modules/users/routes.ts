@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { validateNewUser, validateUpdateUser } from "./validator";
+import { BadRequestError, MissingFieldError } from "../common/errors";
 
 const router = Router();
 
@@ -12,7 +14,7 @@ router.get("/info", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", validateNewUser, async (req, res) => {
   const { username, name, email } = req.body;
 
   try {
@@ -22,7 +24,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.patch("/update", async (req, res) => {
+router.patch("/update", validateUpdateUser, async (req, res) => {
   const { userId } = req.query;
   const { username, name, email } = req.body;
 
