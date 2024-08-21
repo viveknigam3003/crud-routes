@@ -5,6 +5,93 @@ import { validateNewUser, validateUpdateUserBody, validateUpdateUserQuery, valid
 const router = Router();
 const Users = new UserService();
 
+// key value pair 
+
+// 3 endpoints -> get, set, delete
+// get -> input: key
+    // error code 404
+// set -> input: key, value
+    // if the limit is hit -> evict some key value to make space
+    // random value -> random function
+    // LRU
+// del -> input: key
+
+// arbitrary cap -> 5
+
+// eviction
+
+router.get("/info", validateUserInfoRequest, async (req, res) => {
+  const { userId, username } = req.query;
+
+  try {
+    if (userId) {
+      const user = await Users.getUserById({ userId: userId as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+    if (username) {
+      const user = await Users.getUserByUsername({ username: username as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+  } catch (e: any) {
+    return res.status(e.code || 500).send({ message: e.message });
+  }
+});
+
+router.get("/info", validateUserInfoRequest, async (req, res) => {
+  const { userId, username } = req.query;
+
+  try {
+    if (userId) {
+      const user = await Users.getUserById({ userId: userId as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+    if (username) {
+      const user = await Users.getUserByUsername({ username: username as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+  } catch (e: any) {
+    return res.status(e.code || 500).send({ message: e.message });
+  }
+});
+
+router.get("/info", validateUserInfoRequest, async (req, res) => {
+  const { userId, username } = req.query;
+
+  try {
+    if (userId) {
+      const user = await Users.getUserById({ userId: userId as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+    if (username) {
+      const user = await Users.getUserByUsername({ username: username as string });
+
+      res.status(200).json(user);
+      return;
+    }
+
+  } catch (e: any) {
+    return res.status(e.code || 500).send({ message: e.message });
+  }
+});
+
+
+
+
 router.get("/info", validateUserInfoRequest, async (req, res) => {
   const { userId, username } = req.query;
 

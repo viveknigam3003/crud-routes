@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import { connectToMongo } from "./database";
 import UserRoutes from "./modules/users/routes";
+import StoreRoutes from "./modules/kvstore/route";
 import { logRequest } from "./modules/common/logger";
 
 const app = express();
@@ -16,6 +17,7 @@ connectToMongo();
 
 app.use(logRequest);
 app.use("/api/v1/users", UserRoutes);
+app.use("/api/v1/store", StoreRoutes);
 
 const server = app.listen(port, () => {
   console.info(`[INFO] Server Started on PORT: ${port}`);
