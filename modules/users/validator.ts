@@ -16,7 +16,19 @@ export const validateNewUser = (
   validateRequest(req, res, next, userSchema);
 };
 
-export const validateUpdateUser = (
+export const validateUpdateUserQuery = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userUpdateQuerySchema = Joi.object({
+    userId: Joi.string().required(),
+  });
+
+  validateQuery(req, res, next, userUpdateQuerySchema);
+}
+
+export const validateUpdateUserBody = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,11 +38,20 @@ export const validateUpdateUser = (
     email: Joi.string().email().optional(),
     username: Joi.string().forbidden(),
   });
-
-  const userUpdateQuerySchema = Joi.object({
-    userId: Joi.string().required(),
-  });
-
-  validateQuery(req, res, next, userUpdateQuerySchema);
+  
   validateRequest(req, res, next, userUpdateBodySchema);
 };
+
+export const validateUserInfoRequest = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userInfoQuerySchema = Joi.object({
+    // at least one should be present - userId or username
+    userId: Joi.string().optional(),
+    username: Joi.string().optional(),
+  });
+
+  validateQuery(req, res, next, userInfoQuerySchema);
+}
