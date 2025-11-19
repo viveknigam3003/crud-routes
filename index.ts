@@ -4,10 +4,12 @@ import express from "express";
 import { connectToMongo } from "./database";
 import UserRoutes from "./modules/users/routes";
 import StoreRoutes from "./modules/kvstore/route";
+import YamlRoutes from "./modules/yaml/route";
+import XmlRoutes from "./modules/xml/route";
 import { logRequest } from "./modules/common/logger";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8001;
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +20,8 @@ connectToMongo();
 app.use(logRequest);
 app.use("/api/v1/users", UserRoutes);
 app.use("/api/v1/store", StoreRoutes);
+app.use("/api/v1/yaml", YamlRoutes);
+app.use("/api/v1/xml", XmlRoutes);
 
 const server = app.listen(port, () => {
   console.info(`[INFO] Server Started on PORT: ${port}`);
