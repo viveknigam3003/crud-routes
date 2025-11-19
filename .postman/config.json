@@ -1,0 +1,12 @@
+{
+  "workspace": {
+    "id": "eb9cd6e5-dfe8-4fc2-8217-f083f7c8c86e"
+  },
+  "entities": {
+    "collections": ["../postman/collections/CRUD Routes API.postman_collection.json"],
+    "environments": [],
+    "specs": [],
+    "flows": [],
+    "globals": []
+  }
+}

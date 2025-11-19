@@ -18,16 +18,31 @@ process.on("SIGINT", () => {
 
 const connectToMongo = async () => {
   try {
-    const uri = process.env.MONGO_URI;
+    // Default to local MongoDB in Docker container
+    // You can override this by setting MONGO_URI in your .env file
+    const defaultUri = "mongodb://localhost:27017/crud-app";
 
-    if (!uri) {
-        throw new Error("MONGO_URI not provided. Please provide your MongoDB URI in .env file");
-    }
-    // Need to specify MONGO_URI in .env file
-    await connect(process.env.MONGO_URI || "");
+    // Use MONGO_URI only if it's defined and not empty
+    const envUri = process.env.MONGO_URI?.trim();
+    const uri = envUri && envUri.length > 0 ? envUri : defaultUri;
+
+    console.info(
+      `[INFO] Connecting to MongoDB at ${
+        uri.split("@")[1] || uri.split("//")[1]?.split("?")[0]
+      }`
+    );
+
+    await connect(uri);
     console.info("[INFO] Connected to MongoDB");
   } catch (err: any) {
-    console.error("[ERROR] Failed to connect to MongoDB. Reason -", err?.message);
+    console.error(
+      "[ERROR] Failed to connect to MongoDB. Reason -",
+      err?.message
+    );
+    console.error("[INFO] Make sure your MongoDB Docker container is running:");
+    console.error(
+      "      docker run -d -p 27017:27017 --name mongodb mongo:latest"
+    );
   }
 };
 
