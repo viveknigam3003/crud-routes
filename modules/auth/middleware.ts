@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import { ApiKeyService } from "./service";
 import { IApiKey } from "./models";
 
@@ -25,14 +25,15 @@ export const authenticateApiKey = async (
   try {
     // Get API key from header or query parameter
     const apiKey =
-      req.headers["x-api-key"] as string ||
-      req.query.apiKey as string ||
+      (req.headers["x-api-key"] as string) ||
+      (req.query.apiKey as string) ||
       req.headers["authorization"]?.replace("Bearer ", "");
 
     if (!apiKey) {
       return res.status(401).json({
         error: "Unauthorized",
-        message: "API key is required. Provide it via 'x-api-key' header or 'apiKey' query parameter.",
+        message:
+          "API key is required. Provide it via 'x-api-key' header or 'apiKey' query parameter.",
       });
     }
 
@@ -57,7 +58,8 @@ export const createApiKeyRateLimiter = () => {
     windowMs: 60 * 1000, // 1 minute
     keyGenerator: (req: Request) => {
       // Use API key as the identifier for rate limiting
-      return req.apiKey?.key || req.ip || "unknown";
+      // Use ipKeyGenerator helper to properly handle IPv6 addresses
+      return req.apiKey?.key || (req.ip ? ipKeyGenerator(req.ip) : "unknown");
     },
     max: (req: Request) => {
       // Use the API key's configured rate limit
@@ -91,8 +93,8 @@ export const optionalApiKey = async (
 ) => {
   try {
     const apiKey =
-      req.headers["x-api-key"] as string ||
-      req.query.apiKey as string ||
+      (req.headers["x-api-key"] as string) ||
+      (req.query.apiKey as string) ||
       req.headers["authorization"]?.replace("Bearer ", "");
 
     if (apiKey) {
@@ -106,4 +108,3 @@ export const optionalApiKey = async (
     next();
   }
 };
-

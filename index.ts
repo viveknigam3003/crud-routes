@@ -7,6 +7,9 @@ import StoreRoutes from "./modules/kvstore/route";
 import YamlRoutes from "./modules/yaml/route";
 import XmlRoutes from "./modules/xml/route";
 import JsonRoutes from "./modules/json/route";
+import HtmlRoutes from "./modules/html/route";
+import CsvRoutes from "./modules/csv/route";
+import PlainTextRoutes from "./modules/plaintext/route";
 import AuthRoutes from "./modules/auth/routes";
 import { logRequest } from "./modules/common/logger";
 import {
@@ -38,6 +41,9 @@ app.use("/api/v1/store", StoreRoutes);
 app.use("/api/v1/yaml", YamlRoutes);
 app.use("/api/v1/xml", XmlRoutes);
 app.use("/api/v1/json", JsonRoutes);
+app.use("/api/v1/html", HtmlRoutes);
+app.use("/api/v1/csv", CsvRoutes);
+app.use("/api/v1/plaintext", PlainTextRoutes);
 
 const server = app.listen(port, () => {
   console.info(`[INFO] Server Started on PORT: ${port}`);
