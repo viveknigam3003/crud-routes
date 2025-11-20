@@ -1,0 +1,233 @@
+{
+  "info": {
+    "name": "API Key Management",
+    "description": "Collection for managing API keys and testing authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create API Key",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"My Application Key\",\n  \"requestsPerMinute\": 100,\n  \"requestsPerHour\": 5000,\n  \"requestsPerDay\": 50000,\n  \"metadata\": {\n    \"owner\": \"user@example.com\",\n    \"description\": \"API key for my application\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/keys/create",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "auth", "keys", "create"]
+        },
+        "description": "Create a new API key with custom rate limits"
+      },
+      "response": []
+    },
+    {
+      "name": "List All API Keys",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/keys/list?includeInactive=false",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "auth", "keys", "list"],
+          "query": [
+            {
+              "key": "includeInactive",
+              "value": "false",
+              "description": "Set to true to include revoked keys"
+            }
+          ]
+        },
+        "description": "Get a list of all API keys"
+      },
+      "response": []
+    },
+    {
+      "name": "Get API Key Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/keys/details?key={{apiKey}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "auth", "keys", "details"],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{apiKey}}",
+              "description": "The API key to get details for"
+            }
+          ]
+        },
+        "description": "Get detailed information about a specific API key"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Rate Limits",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requestsPerMinute\": 200,\n  \"requestsPerHour\": 10000,\n  \"requestsPerDay\": 100000\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/keys/rate-limit?key={{apiKey}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "auth", "keys", "rate-limit"],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{apiKey}}",
+              "description": "The API key to update"
+            }
+          ]
+        },
+        "description": "Update the rate limits for an existing API key"
+      },
+      "response": []
+    },
+    {
+      "name": "Revoke API Key",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/keys/revoke?key={{apiKey}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "auth", "keys", "revoke"],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{apiKey}}",
+              "description": "The API key to revoke"
+            }
+          ]
+        },
+        "description": "Revoke an API key (makes it inactive)"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Authenticated Request (Header)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/info?userId=test123",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "info"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "test123"
+            }
+          ]
+        },
+        "description": "Test an authenticated request using the x-api-key header"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Authenticated Request (Query Param)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/info?userId=test123&apiKey={{apiKey}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "info"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "test123"
+            },
+            {
+              "key": "apiKey",
+              "value": "{{apiKey}}"
+            }
+          ]
+        },
+        "description": "Test an authenticated request using query parameter"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Rate Limiting",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/info?userId=test123",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "info"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "test123"
+            }
+          ]
+        },
+        "description": "Run this request multiple times quickly to test rate limiting"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Unauthenticated Request (Should Fail)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/info?userId=test123",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "info"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "test123"
+            }
+          ]
+        },
+        "description": "Test request without API key (should return 401 if auth is enabled)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8001",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
