@@ -37,6 +37,32 @@ npm run dev
 
 This will run your server on `PORT: 8001`. Port is defined in `index.ts` and you can change it to any valid port.
 
+## 🔄 Running Server in Background
+
+Use the control script to run the server in background:
+
+```bash
+# Start server (builds and runs in background)
+./crud-server.sh start
+
+# Stop server
+./crud-server.sh stop
+
+# Restart server
+./crud-server.sh restart
+
+# Check status & memory usage
+./crud-server.sh status
+
+# View logs
+./crud-server.sh logs
+```
+
+**Memory optimized for lightweight serving:**
+- Idle: ~30-50MB
+- Under Load: ~80-120MB
+- Max Heap: 128MB
+
 ## 🔐 API Key Authentication & Rate Limiting
 
 Built-in API key authentication with rate limiting protects your server from excessive requests.
