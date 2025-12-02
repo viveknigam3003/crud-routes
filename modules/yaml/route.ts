@@ -135,7 +135,6 @@ router.get("/", (req: Request, res: Response) => {
   try {
     // Parse query parameters
     const requestedSize = parseInt(req.query.size as string) || 100;
-    console.log("🚀 ~ requestedSize:", requestedSize);
     const shouldStream =
       req.query.stream === "true" || req.query.stream === "1";
 
